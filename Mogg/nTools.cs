@@ -341,7 +341,8 @@ namespace NautilusFREE
             //0xF0 is already decrypted YARG file, so we don't "support" it here
             return version == CryptVersion.x0B || version == CryptVersion.x0C ||
                 version == CryptVersion.x0D || version == CryptVersion.x0E ||
-                version == CryptVersion.x0F || version == CryptVersion.x10;
+                version == CryptVersion.x0F || version == CryptVersion.x10 ||
+                version == CryptVersion.x11;
         }             
 
         public byte[] DeObfM(byte[] mData)
