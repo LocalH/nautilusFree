@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using System.Security.Cryptography;
-using System.Xml.Linq;
 
 namespace NautilusFREE
 {
@@ -339,6 +337,7 @@ namespace NautilusFREE
                 case CryptVersion.x0E:
                 case CryptVersion.x0F:
                 case CryptVersion.x10:
+                case CryptVersion.x11:
                     return true;
                 default:
                     return false;
@@ -645,6 +644,7 @@ namespace NautilusFREE
         /// <param name="HvKey">The hardcoded key from the game binary.</param>
         /// <param name="moggData">Bytes of the mogg file.</param>
         /// <param name="useNewCrypt">New or old crypt method?</param>
+        /// <param name "_version">HMX version of encryption used</param>
         /// <returns>The generated key.</returns>
         public static byte[] GenPrivateKey(ref byte[] HvKey, ref byte[] moggData, bool useNewCrypt, CryptVersion _version)
         {
@@ -682,7 +682,7 @@ namespace NautilusFREE
                 case CryptVersion.x10:
                     break;
                 case CryptVersion.x11:
-                    tableOffset = BitConverter.ToInt32(moggData, 20 + numEntries * 8 + 16 + 48 + 8); // v17 adds an 8-byte field to hold the v17 keyset in use
+                    tableOffset = BitConverter.ToInt32(moggData, 20 + numEntries * 8 + 16 + 48 + 8); // v17 adds an 8-byte field to denote the v17 keyset in use
                     break;
             }
 
@@ -1218,7 +1218,7 @@ namespace NautilusFREE
             for (var i = 0; i < 16; i++)
             {
                 ret[i] = (byte)(hex_char_to_nibble(h[i * 2]) * 16 |
-                                hex_char_to_nibble(h[i * 2 + 1])); // changing "<< 4" to "* 16" was all it took to get v17 working btw
+                                hex_char_to_nibble(h[i * 2 + 1])); // changing "<< 4" to "* 16" was all it took to get v17 working without breaking v12-v16 btw
             }
             return ret;
         }
